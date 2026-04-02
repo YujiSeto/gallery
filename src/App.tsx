@@ -9,14 +9,68 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const [photos, setPhotos] = useState<Photo[]>([]);
 
+  const isConfigured = !!(
+    process.env.REACT_APP_FIREBASE_APIKEY &&
+    process.env.REACT_APP_FIREBASE_STORAGEBUCKET
+  );
+
+  const [status, setStatus] = useState<
+    "online" | "offline" | "warning" | "checking"
+  >("checking");
+
+  useEffect(() => {
+    const checkConnection = async () => {
+      if (!window.navigator.onLine) {
+        setStatus("offline");
+        return;
+      }
+      if (!isConfigured) {
+        setStatus("warning");
+        return;
+      }
+
+      setStatus("checking");
+      try {
+        // A direct call to getAll() will verify the configuration and connection
+        await Photos.getAll();
+        setStatus("online");
+      } catch (e) {
+        setStatus("warning");
+      }
+    };
+
+    checkConnection();
+
+    const handleStatusChange = () => {
+      if (!window.navigator.onLine) {
+        setStatus("offline");
+      } else {
+        checkConnection();
+      }
+    };
+
+    window.addEventListener("online", handleStatusChange);
+    window.addEventListener("offline", handleStatusChange);
+
+    return () => {
+      window.removeEventListener("online", handleStatusChange);
+      window.removeEventListener("offline", handleStatusChange);
+    };
+  }, [isConfigured]);
+
   useEffect(() => {
     const getPhotos = async () => {
+      if (!isConfigured) return;
       setLoading(true);
-      setPhotos(await Photos.getAll());
+      try {
+        setPhotos(await Photos.getAll());
+      } catch (e) {
+        console.error(e);
+      }
       setLoading(false);
     };
     getPhotos();
-  }, []);
+  }, [isConfigured]);
 
   const handleFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -50,6 +104,13 @@ const App = () => {
   return (
     <C.Container>
       <C.Area>
+        <C.StatusIndicator $status={status}>
+          <C.StatusDot $status={status} />
+          {status === "checking" && "Checking..."}
+          {status === "online" && "Firebase Online"}
+          {status === "warning" && "Missing Configuration"}
+          {status === "offline" && "Firebase Offline"}
+        </C.StatusIndicator>
         <C.Header>Gallery</C.Header>
 
         <C.UploadForm method="POST" onSubmit={handleFormSubmit}>

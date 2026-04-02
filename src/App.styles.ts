@@ -10,6 +10,7 @@ export const Area = styled.div`
   margin: auto;
   max-width: 980px;
   padding: 30px 0;
+  position: relative;
 `;
 
 export const Header = styled.h1`
@@ -53,4 +54,59 @@ export const UploadForm = styled.form`
       opacity: 0.9;
     }
   }
+`;
+export const StatusIndicator = styled.div<{
+  $status: "online" | "offline" | "warning" | "checking";
+}>`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: ${(props) => {
+    if (props.$status === "online") return "rgba(76, 175, 80, 0.2)";
+    if (props.$status === "warning") return "rgba(255, 152, 0, 0.2)";
+    if (props.$status === "checking") return "rgba(33, 150, 243, 0.2)";
+    return "rgba(244, 67, 54, 0.2)";
+  }};
+  color: ${(props) => {
+    if (props.$status === "online") return "#4CAF50";
+    if (props.$status === "warning") return "#FF9800";
+    if (props.$status === "checking") return "#2196F3";
+    return "#f44336";
+  }};
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid
+    ${(props) => {
+      if (props.$status === "online") return "#4CAF50";
+      if (props.$status === "warning") return "#FF9800";
+      if (props.$status === "checking") return "#2196F3";
+      return "#f44336";
+    }};
+  position: absolute;
+  top: 30px;
+  right: 0;
+  transition: all 0.3s ease;
+`;
+
+export const StatusDot = styled.div<{
+  $status: "online" | "offline" | "warning" | "checking";
+}>`
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: ${(props) => {
+    if (props.$status === "online") return "#4CAF50";
+    if (props.$status === "warning") return "#FF9800";
+    if (props.$status === "checking") return "#2196F3";
+    return "#f44336";
+  }};
+  box-shadow: 0 0 8px
+    ${(props) => {
+      if (props.$status === "online") return "#4CAF50";
+      if (props.$status === "warning") return "#FF9800";
+      if (props.$status === "checking") return "#2196F3";
+      return "#f44336";
+    }};
 `;
