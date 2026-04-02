@@ -4,6 +4,12 @@ export const Container = styled.div`
   background-color: #3d3f43;
   border-radius: 10px;
   padding: 10px;
+  position: relative;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.02);
+  }
 
   img {
     max-width: 100%;
@@ -13,17 +19,33 @@ export const Container = styled.div`
   }
 
   button {
-    background-color: #7569f4;
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: #f44336;
     border: 0;
     color: #fff;
-    padding: 8px 16px;
-    font-size: 15px;
-    border-radius: 10px;
-    margin: 0 20px;
+    width: 24px;
+    height: 24px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 50%;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transition: opacity 0.2s, transform 0.2s;
 
     &:hover {
-      opacity: 0.9;
+      background-color: #c62828;
+      transform: scale(1.1);
     }
   }
+
+  &:hover button {
+    opacity: 1;
+  }
 `;
+

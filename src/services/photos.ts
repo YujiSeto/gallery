@@ -26,10 +26,13 @@ export const getAll = async (): Promise<Photo[]> => {
   return list;
 };
 
-export const insert = async (file: File) => {
+export const insert = async (file: File, name?: string) => {
   if (["image/jpeg", "image/jpg", "image/png"].includes(file.type)) {
-    let randomName = createId();
-    let newFile = ref(storage, `images/${randomName}`);
+    let finalName = name || createId();
+    let extension = file.name.split(".").pop();
+    let fileName = `${finalName}.${extension}`;
+
+    let newFile = ref(storage, `images/${fileName}`);
     let upload = await uploadBytes(newFile, file);
     let photoUrl = await getDownloadURL(upload.ref);
 
@@ -38,6 +41,7 @@ export const insert = async (file: File) => {
     return new Error("File type not allowed");
   }
 };
+
 
 export const deletePhoto = async (name: string) => {
   let photoRef = ref(storage, `images/${name}`);
