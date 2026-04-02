@@ -136,22 +136,24 @@ const App = () => {
 
     if (file && file.size > 0) {
       setUploading(true);
-      const result = await Photos.insert(file, photoName.trim());
-      setUploading(false);
-
-
-      if (result instanceof Error) {
-        alert(`${result.name}: ${result.message}`);
-      } else {
-        const newPhotoList = [...photos];
-        newPhotoList.push(result);
-        setPhotos(newPhotoList);
-        setPreviewUrl("");
-        setPhotoName("");
-        form.reset();
+      try {
+        const result = await Photos.insert(file, photoName.trim());
+        if (result instanceof Error) {
+          alert(`${result.name}: ${result.message}`);
+        } else {
+          setPhotos((prev) => [...prev, result]);
+          setPreviewUrl("");
+          setPhotoName("");
+          form.reset();
+        }
+      } catch (e) {
+        alert("Upload failed. Please check your connection.");
+      } finally {
+        setUploading(false);
       }
     }
   };
+
 
 
 
@@ -164,12 +166,16 @@ const App = () => {
       return;
     }
     setLoading(true);
-
-    await Photos.deletePhoto(name);
-    let newPhotoList = photos.filter((item) => item.name !== name);
-    setPhotos(newPhotoList);
-    setLoading(false);
+    try {
+      await Photos.deletePhoto(name);
+      setPhotos((prev) => prev.filter((item) => item.name !== name));
+    } catch (e) {
+      alert("Delete failed. Please check your connection.");
+    } finally {
+      setLoading(false);
+    }
   };
+
 
   return (
     <C.Container>
