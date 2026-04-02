@@ -10,8 +10,9 @@ export const Container = styled.div`
 export const Area = styled.div`
   margin: auto;
   max-width: 980px;
-  padding: 30px 0;
+  padding: 30px 15px;
   position: relative;
+
 `;
 
 export const Header = styled.h1`
@@ -32,8 +33,17 @@ export const ScreenWarning = styled.div`
 export const PhotoList = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
+  gap: 15px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
 `;
+
 
 export const UploadForm = styled.form`
   background-color: #3d3f43;
@@ -44,6 +54,12 @@ export const UploadForm = styled.form`
   align-items: center;
   gap: 15px;
   flex-wrap: wrap;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
 
 
   input[type="file"] {
@@ -75,6 +91,11 @@ export const UploadForm = styled.form`
     border-radius: 10px;
     outline: none;
     min-width: 200px;
+
+    @media (max-width: 480px) {
+      min-width: 0;
+    }
+
 
     &::placeholder {
       color: #999;
@@ -164,7 +185,15 @@ export const StatusIndicator = styled.div<{
   top: 30px;
   right: 0;
   transition: all 0.3s ease;
+
+  @media (max-width: 768px) {
+    position: relative;
+    top: 0;
+    margin: 10px 0;
+    justify-content: center;
+  }
 `;
+
 
 export const StatusDot = styled.div<{
   $status: "online" | "offline" | "warning" | "checking" | "demo";
@@ -213,7 +242,16 @@ export const DemoButton = styled.button`
   left: 0;
   transition: all 0.3s ease;
 
+  @media (max-width: 768px) {
+    position: relative;
+    top: 0;
+    margin: 10px 0;
+    width: 100%;
+    text-align: center;
+  }
+
   &:hover {
+
     background-color: #7569f4;
     color: #fff;
   }

@@ -6,6 +6,7 @@ export const Container = styled.div`
   padding: 10px;
   position: relative;
   transition: transform 0.2s;
+  text-align: center;
 
   &:hover {
     transform: scale(1.02);
@@ -14,9 +15,10 @@ export const Container = styled.div`
   img {
     max-width: 100%;
     display: block;
-    margin-bottom: 10px;
+    margin: 0 auto 10px auto;
     border-radius: 10px;
   }
+
 
   button {
     position: absolute;
